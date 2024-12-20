@@ -35,7 +35,7 @@ local function CheckItem(itemName, count)
     local prop = Config.Items[itemName]
     local totalCount = count or 1
     if prop then
-        if totalCount > 0 then
+        if totalCount >= (prop.requiredCount or 1) then
             CreateObjectOnHand(cache.ped, prop.propModel, prop.offset, prop.pos, prop.rot)
         else
             RemoveOnHandObject()
