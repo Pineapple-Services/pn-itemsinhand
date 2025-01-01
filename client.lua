@@ -13,7 +13,7 @@ local function CreateObjectOnHand(model, offset, pos, rot)
     object = prop
 
     CreateThread(function()
-        while object and object > 0 do
+        while object and object > 0 and DoesEntityExist(object) do
             if not IsEntityPlayingAnim(cache.ped, "anim@heists@box_carry@", "idle", 63) then
                 TaskPlayAnim(cache.ped, "anim@heists@box_carry@", "idle", 3.0, 3.0, -1, 63, 0, 0, 0, 0)
             end
@@ -36,7 +36,7 @@ local function CheckItem(itemName, count)
     local totalCount = count or 1
     if prop then
         if totalCount >= (prop.requiredCount or 1) then
-            CreateObjectOnHand(cache.ped, prop.propModel, prop.offset, prop.pos, prop.rot)
+            CreateObjectOnHand(prop.propModel, prop.offset, prop.pos, prop.rot)
         else
             RemoveOnHandObject()
         end
