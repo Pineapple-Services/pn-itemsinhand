@@ -3,14 +3,16 @@ local object
 local function CreateObjectOnHand(model, offset, pos, rot)
     lib.requestModel(model)
     lib.requestAnimDict("anim@heists@box_carry@")
+    
+    local offset = offset or vec3(0.0, 0.0, 0.2)
+    local pos = pos or vec3(0.2, 0.08, 0.2)
+    local rot = rot or vec3(-45.0, 290.0, 0.0)
 
-    local prop = CreateObject(model, GetEntityCoords(cache.ped) + vector3(offset.x or 0.0, offset.y or 0.0, offset.z or 0.2), true, false, false)
+    object = CreateObject(model, GetEntityCoords(cache.ped) + vector3(offset.x or 0.0, offset.y or 0.0, offset.z or 0.2), true, false, false)
 
     TaskPlayAnim(cache.ped, "anim@heists@box_carry@", "idle", 3.0, -8, -1, 63, 0, 0, 0, 0)
-    AttachEntityToEntity(prop, cache.ped, GetPedBoneIndex(cache.ped, 60309), pos.x or 0.2, pos.y or 0.08, pos.z or 0.2,
+    AttachEntityToEntity(object, cache.ped, GetPedBoneIndex(cache.ped, 60309), pos.x or 0.2, pos.y or 0.08, pos.z or 0.2,
         rot.x or -45.0, rot.y or 290.0, rot.z or 0.0, true, true, false, true, 1, true)
-
-    object = prop
 
     CreateThread(function()
         while object and object > 0 and DoesEntityExist(object) do
@@ -20,9 +22,10 @@ local function CreateObjectOnHand(model, offset, pos, rot)
             Wait(0)
         end
         ClearPedTasks(cache.ped)
+        RemoveAnimDict("anim@heists@box_carry@")
     end)
 
-    return prop
+    return object
 end
 
 local function RemoveOnHandObject()
